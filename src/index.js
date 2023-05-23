@@ -10,6 +10,7 @@ const listEl = document.querySelector('.country-list');
 
 const info = document.querySelector('.country-info');
 
+
 const handleSearchCountry = event => {
 
   const searchCountry = event.target.value.trim();
