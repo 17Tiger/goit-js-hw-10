@@ -1,8 +1,8 @@
 
-import './css/styles.css';
 import debounce from 'lodash.debounce';
 import Notiflix, { Notify } from 'notiflix';
 import { fetchCountries } from './fetchCountries';
+import './css/styles.css';
 
 const inputEl = document.getElementById('search-box');
 
@@ -14,22 +14,28 @@ const info = document.querySelector('.country-info');
 const handleSearchCountry = event => {
 
   const searchCountry = event.target.value.trim();
-  listEl.innerHTML = '';
-
+  function clearList() {
+       listEl.innerHTML = '';
+                          
+  }
+       
+  
+  
+       clearList();
   if (searchCountry !== '') {
 
     fetchCountries(searchCountry)
       .then(data => {
         if (2 <= data.length && data.length <= 10) {
-          const markup = data
-            .map(
-              country =>
-                `<li class= "list-item"><img clas = "flag" src=${country.flags.png} width = 80px>  ${country.name.common} </li>`
-            )
-            .join('');
+          function createCountryMarkup(country) {
+            return `<li class="list-item"><img class="flag" src=${country.flags.png} width="80px">${country.name.common}</li>`;
+          }
+
+          const markup = data.map(createCountryMarkup).join('');
 
           listEl.insertAdjacentHTML('beforeend', markup);
         }
+
         if (data.length > 10) {
 
 
@@ -41,17 +47,14 @@ const handleSearchCountry = event => {
         if (data.length === 1) {
 
 
-          const countryInfo = data
-            .map(
-              country =>
-                `<h2><img clas = "flag" src=${
-                  country.flags.png
-                } width = 80px>  ${country.name.common} </h2>
-                <p>Capital: ${country.capital}</p>
-                <p>Population: ${country.population}</p>
-                <p>Languages: ${Object.values(country.languages)}</p>`
-            )
-            .join('');
+          function createCountryInfo(country) {
+            return `<h2><img class="flag" src=${country.flags.png} width="80px">${country.name.common}</h2>
+          <p>Capital: ${country.capital}</p>
+          <p>Population: ${country.population}</p>
+          <p>Languages: ${Object.values(country.languages)}</p>`;
+          }
+
+          const countryInfo = data.map(createCountryInfo).join('');
 
           listEl.insertAdjacentHTML('beforeend', countryInfo);
         }
